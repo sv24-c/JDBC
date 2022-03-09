@@ -20,6 +20,7 @@ public class CrudOperation
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
+
         }
         catch (ClassNotFoundException e)
         {
@@ -33,11 +34,8 @@ public class CrudOperation
 
         try
         {
-            if (con == null)
-            {
 
-                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mysqldb?characterEncoding=latin1", "root", "Mind@123");
-            }
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mysqldb?characterEncoding=utf8", "root", "Mind@123");
 
             System.out.println("Connection Established..");
 
@@ -86,50 +84,55 @@ public class CrudOperation
 
             con = makeConnection();
 
-            preparedStatement = con.prepareStatement("SELECT * FROM emp");
-
-            System.out.println("Prepared statement created successfully");
-
-            //preparedStatement.setString(1, "pavan");
-
-            //preparedStatement.setString(2,"smit");
-
-            //preparedStatement.setString(3, "age");
-
-            //preparedStatement.setString(4, "address");
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            List<Map<String, Object>> list =  new ArrayList<Map<String, Object>>();
-
-            System.out.println("New ArrayList created");
-
-            while (resultSet.next())
+            if ( con != null)
             {
-                Map<String, Object> map = new LinkedHashMap<String, Object>();
+                preparedStatement = con.prepareStatement("SELECT * FROM emp");
 
-                System.out.println("New LinkedHashMap has created ");
+                System.out.println("Prepared statement created successfully");
 
-                map.put("id", resultSet.getInt(1));
+                //preparedStatement.setString(1, "pavan");
 
-                map.put("name", resultSet.getString(2));
+                //preparedStatement.setString(2,"smit");
 
-                map.put("age", resultSet.getInt(3));
+                //preparedStatement.setString(3, "age");
 
-                map.put("address", resultSet.getString(4));
+                //preparedStatement.setString(4, "address");
 
-                list.add(map);
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-                System.out.println("Map added to list");
+                List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+
+                System.out.println("New ArrayList created");
+
+                while (resultSet.next()) {
+                    Map<String, Object> map = new LinkedHashMap<String, Object>();
+
+                    System.out.println("New LinkedHashMap has created ");
+
+                    map.put("id", resultSet.getInt(1));
+
+                    map.put("name", resultSet.getString(2));
+
+                    map.put("age", resultSet.getInt(3));
+
+                    map.put("address", resultSet.getString(4));
+
+                    list.add(map);
+
+                    System.out.println("Map added to list");
+
+                }
+
+                for (int i = 0; i < list.size(); i++) {
+                    System.out.println(list.get(i));
+                }
 
             }
 
-            for (int i = 0; i <list.size() ; i++)
+            else
             {
-                System.out.println(list.get(i));
+                System.out.println("Connection not established...");
             }
-
-
 
         }
 
@@ -164,18 +167,26 @@ public class CrudOperation
         {
             con = makeConnection();
 
-            preparedStatementOfUpdate = con.prepareStatement("UPDATE emp SET name=? where id=?");
+            if (con != null)
+            {
+                preparedStatementOfUpdate = con.prepareStatement("UPDATE emp SET name=? where id=?");
 
-            System.out.println("Prepared statement created successfully");
+                System.out.println("Prepared statement created successfully");
 
-            preparedStatementOfUpdate.setString(1, "smitvachhani");
+                preparedStatementOfUpdate.setString(1, "smitvachhani");
 
-            preparedStatementOfUpdate.setInt(2, 12);
+                preparedStatementOfUpdate.setInt(2, 12);
 
-            int result = preparedStatementOfUpdate.executeUpdate();
+                int result = preparedStatementOfUpdate.executeUpdate();
 
-            System.out.println(result+" record updated successfully");
+                System.out.println(result + " record updated successfully");
 
+            }
+
+            else
+            {
+                System.out.println("Connection not established...");
+            }
 
         }
 
@@ -205,14 +216,23 @@ public class CrudOperation
         {
             con = makeConnection();
 
-            preparedStatementOfDeleteRow = con.prepareStatement("DELETE from emp where id=?");
+            if ( con != null)
+            {
 
-            preparedStatementOfDeleteRow.setInt(1, 333);
+                preparedStatementOfDeleteRow = con.prepareStatement("DELETE name from emp where id=?");
 
-            int result = preparedStatementOfDeleteRow.executeUpdate();
+                preparedStatementOfDeleteRow.setInt(1, 333);
 
-            System.out.println(result+" record deleted successfully");
+                int result = preparedStatementOfDeleteRow.executeUpdate();
 
+                System.out.println(result + " record deleted successfully");
+
+            }
+
+            else
+            {
+                System.out.println("Connection not established...");
+            }
         }
 
         catch (Exception e)
@@ -239,20 +259,28 @@ public class CrudOperation
         {
             con = makeConnection();
 
-            preparedStatementOfInsert = con.prepareStatement("INSERT INTO emp VALUES(?,?,?,?)");
+            if ( con != null)
+            {
+                preparedStatementOfInsert = con.prepareStatement("INSERT INTO emp VALUES(?,?,?,?)");
 
-            preparedStatementOfInsert.setInt(1, 333);
+                preparedStatementOfInsert.setInt(1, 333);
 
-            preparedStatementOfInsert.setString(2, "xyzxyz");
+                preparedStatementOfInsert.setString(2, "xyzxyz");
 
-            preparedStatementOfInsert.setInt(3, 33);
+                preparedStatementOfInsert.setInt(3, 33);
 
-            preparedStatementOfInsert.setString(4, "ahm");
+                preparedStatementOfInsert.setString(4, "ahm");
 
-            int result = preparedStatementOfInsert.executeUpdate();
+                int result = preparedStatementOfInsert.executeUpdate();
 
-            System.out.println(result+" record inserted successfully");
+                System.out.println(result + " record inserted successfully");
 
+            }
+
+            else
+            {
+                System.out.println("Connection not established...");
+            }
         }
 
         catch (Exception e)
@@ -279,12 +307,20 @@ public class CrudOperation
         {
             con = makeConnection();
 
-            preparedStatementOfCreateTable = con.prepareStatement("CREATE TABLE copyofcaragain (Number INT (10), ModalName VARCHAR (30), Price int(10))");
+            if (con != null)
+            {
+                preparedStatementOfCreateTable = con.prepareStatement("CREATE TABLE copyofcaragain (Number INT (10), ModalName VARCHAR (30), Price int(10))");
 
-            int result = preparedStatementOfCreateTable.executeUpdate();
+                int result = preparedStatementOfCreateTable.executeUpdate();
 
-            System.out.println(result+" Table Created Successfully");
+                System.out.println(result + " Table Created Successfully");
 
+            }
+
+            else
+            {
+                System.out.println("Connection not established...");
+            }
         }
 
         catch (Exception e)
@@ -305,6 +341,7 @@ public class CrudOperation
     private static void showTableList() throws SQLException
     {
 
+
         Connection con = null;
 
         PreparedStatement preparedStatement = null;
@@ -315,15 +352,23 @@ public class CrudOperation
         {
             con = makeConnection();
 
-            DatabaseMetaData databaseMetaData = con.getMetaData();
-
-            String table[] = {"TABLE"};
-
-            ResultSet resultSet = databaseMetaData.getTables(null,null,null, table);
-
-            while (resultSet.next())
+            if (con != null)
             {
-                System.out.println(resultSet.getString(3));
+                DatabaseMetaData databaseMetaData = con.getMetaData();
+
+                String table[] = {"TABLE"};
+
+                ResultSet resultSet = databaseMetaData.getTables(null, null, null, table);
+
+                while (resultSet.next()) {
+                    System.out.println(resultSet.getString(3));
+                }
+
+            }
+
+            else
+            {
+                System.out.println("Connection not established...");
             }
 
         }
